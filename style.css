@@ -52,7 +52,7 @@ form
 .conWrap
 {
 	grid-area: cMain;
-	overflow:hidden;
+	/*overflow:hidden;*/
 }
 .navWrap
 {
