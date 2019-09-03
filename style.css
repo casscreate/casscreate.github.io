@@ -1,0 +1,91 @@
+*
+{
+	margin: 0;
+	padding: 0;
+}
+
+h1
+{
+	margin-bottom: 1em;
+}
+/*input, textarea
+{
+	margin-bottom: 1em;
+}*/
+textarea
+{
+	resize: none;
+	width: 25em;
+	height: 8em;
+}
+label
+{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 0.8em;
+	color: #454545;
+}
+h1
+{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 700;	
+}
+form
+{
+	height:100%;
+}
+.inpTitle
+{
+	margin: 1em 0 0.4em 0;
+	display: inline-block;
+}
+
+.wrap
+{
+	display:grid;
+	grid-template-columns: 20vw 20vw 40vw 20vw;
+	grid-template-rows: 10vh 80vh 10vh;
+	grid-template-areas: ". . buffer ."
+						 ". cNav cMain ."
+						 ". . buffer1 .";
+}
+.conWrap
+{
+	grid-area: cMain;
+	overflow:hidden;
+}
+.navWrap
+{
+	grid-area: cNav;
+	text-align: right;
+	padding-right: 4em;
+}
+#frontForm, #backForm
+{
+	display:inline-block;
+	height:100%;
+	width: 100%;
+}
+.brewIcon
+{
+	width:4em;
+	margin-right:10px;
+}
+[type=checkbox] 
+{ 
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+/* IMAGE STYLES */
+[type=checkbox] + img 
+{
+	cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=checkbox]:checked + img {
+	outline: 2px solid #009933;
+}

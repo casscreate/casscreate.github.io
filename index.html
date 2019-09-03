@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Single Origin Editor</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+	<script src="js/pdfGen.js" type="text/javascript"></script>
+	<script src="js/sanitise.js" type="text/javascript"></script>
+	<script src="js/Courier-normal.js" type="module"></script>
+	<script src="js/Courier-Bold-normal.js" type="module"></script>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="wrap" onload="addHandlers()">
+	<div class="navWrap">
+		<h1>Single Origin Editor</h1>
+	</div>
+	<div class="conWrap">
+		<form name="card" autocomplete="off">
+				<!-- <label class="inpTitle">Colour</label><br />
+				<input type="radio" name="colour" value="Kenya">
+				<input type="radio" name="colour" value="PNG"><br /> -->
+				<label class="inpTitle">Origin</label><br />
+				<input name="Origin" id="origin"><br />
+				<label class="inpTitle">Brewing Methods</label><br />
+				<label>
+					<input type="checkbox" name="brew" value="Aeropress">
+					<img class="brewIcon" src="img/aeropress.svg">
+				</label>
+				<label>
+					<input type="checkbox" name="brew" value="Espresso">
+					<img class="brewIcon" src="img/espresso.svg">
+				</label>
+				<label>
+					<input type="checkbox" name="brew" value="French Press">
+					<img class="brewIcon" src="img/frenchpress.svg">
+				</label>
+				<label>
+					<input type="checkbox" name="brew" value="Moka">
+					<img class="brewIcon" src="img/moka.svg">
+				</label><br />
+				<label class="inpTitle">Region</label><br />
+				<input name="Region" id="region"><br />
+				<label class="inpTitle">Notes</label><br />
+				<textarea name="Notes" id="notes"></textarea><br />
+				<label class="inpTitle">Producer</label><br />
+				<input name="Producer" id="producer"><br />
+				<label class="inpTitle">Altitude</label><br />
+				<input name="Altitude" id="altitude"><br />
+				<label class="inpTitle">Info</label><br />
+				<textarea name="Info" id="info"></textarea><br />
+				<input type="submit" value="Submit" onclick="pdfGen()" id="formSubmit" disabled="true" method="post">
+		</form>
+	</div>
+	<script type="text/javascript">
+		function pdfGen(){
+			var colours = document.getElementsByName('colour');
+			for (var i = 0, length = colours.length; i < length; i++){
+				if (colours[i].checked){
+					var colourVal = colours[i].value;
+					break;
+				}
+			}
+			var brew = document.getElementsByName('brew');
+			var x = 0
+			var i = 0
+			var brewVal = [];
+			for (i = 0; i < brew.length; i++){
+				if (brew[i].checked){
+					brewVal[x] = brew[i].value;
+					x++
+				}
+			}
+			var originVal = document.getElementById('origin').value;
+			var regionVal = document.getElementById('region').value;
+			var notesVal = document.getElementById('notes').value;
+			var cardChoice = [];
+			var producerVal = document.getElementById('producer').value;
+			var altitudeVal = document.getElementById('altitude').value;
+			var infoVal = document.getElementById('info').value;
+			if (colourVal == 'Kenya') {
+				cardChoice[0] = cardFront1
+				cardChoice[1] = cardBack1
+			} else {
+				cardChoice[0] = cardFront1
+				cardChoice[1] = cardBack1 
+				//CHANGE THIS
+			}
+			var doc = new jsPDF({
+				orientation: 'portrait',
+  				unit: 'mm',
+				format: [184, 283]
+			})
+		
+			doc.addImage(cardChoice[0], 'PNG', 0, 0, 65, 100)
+			var iconPos = [12, 20, 28, 36];
+			x = 0;
+			for (i = 0; i < brewVal.length; i++){
+				switch(brewVal[i]){
+					case 'Aeropress':
+						doc.addImage(aeropressIcon, 'JPEG', iconPos[x], 40, 8, 8);
+						x++	
+						break;
+					case 'Espresso':
+						doc.addImage(espressoIcon, 'JPEG', iconPos[x], 40, 8, 8);
+						x++
+						break;
+					case 'French Press':
+						doc.addImage(frenchpressIcon, 'JPEG', iconPos[x], 40, 8, 8);
+						x++	
+						break;
+					case 'Moka':
+						doc.addImage(mokaIcon, 'JPEG', iconPos[x], 40, 8, 8);
+						x++	
+						break;
+				}
+
+			}
+			doc.setFont('Courier-Bold')
+			doc.setFontType('normal')
+			doc.setFontSize(8)
+			doc.setTextColor(255, 255, 255)
+			doc.text(14, 14, originVal)
+
+			doc.setFont('Courier')
+			doc.setFontType('normal')
+			doc.setFontSize(7)
+			doc.setTextColor(118, 119, 118)
+			doc.text(11.85, 53.5, regionVal)
+			var splitNotes = doc.splitTextToSize(notesVal, 42);
+			doc.text(11.85, 61.8, splitNotes)
+			/*doc.text(80, 90, producerVal)
+			doc.text(80, 110, altitudeVal)
+			doc.text(80, 130, infoVal)*/
+			doc.save('cardfront.pdf')
+			var doc2 = new jsPDF({
+				orientation: 'portrait',
+  				unit: 'mm',
+				format: [184, 283]
+			})
+			doc2.addImage(cardChoice[1], 'PNG', 0, 0, 65, 100)
+			doc2.setFont('Courier')
+			doc2.setFontType('normal')
+			doc2.setFontSize(7)
+			doc2.setTextColor(118, 119, 118)
+			doc2.text(11, 14.5, producerVal)
+			doc2.text(11, 23.5, altitudeVal)
+			var splitInfo = doc.splitTextToSize(infoVal, 42);
+			doc2.text(11, 33, splitInfo)
+			doc2.save('cardback.pdf')
+		}
+	</script>
+</body>
+</html>
