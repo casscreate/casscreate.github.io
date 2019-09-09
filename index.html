@@ -132,7 +132,7 @@
 			/*doc.text(80, 90, producerVal)
 			doc.text(80, 110, altitudeVal)
 			doc.text(80, 130, infoVal)*/
-			doc.save('cardfront.pdf')
+			doc.save('cardfront.pdf');
 			var doc2 = new jsPDF({
 				orientation: 'portrait',
   				unit: 'mm',
@@ -147,7 +147,7 @@
 			doc2.text(11, 23.5, altitudeVal)
 			var splitInfo = doc.splitTextToSize(infoVal, 42);
 			doc2.text(11, 33, splitInfo)
-			doc2.save('cardback.pdf')
+			setTimeout(function(){ doc2.save('cardback.pdf'); }, 1000)
 		}
 	</script>
 </body>
